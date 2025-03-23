@@ -26,4 +26,32 @@ const fetchMyIP = function(callback) {
   });
 }
 
-module.exports = { fetchMyIP };
+
+const fetchCoordsByIP = function(ip, callback) { 
+  // use request to fetch IP address from JSON API
+  needle.get(`http://ipwho.is/${ip}`, (error, response, body) => {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    //line below shows course suggestion but is commented out as it causes error
+    //const body = JSON.parse(body);
+
+    if (!body.success) {
+      const message = `Success status was ${body.success}. Server message says: ${body.message} when fetching for IP ${body.ip}`;
+      callback(Error(message), null);
+      return;
+    } 
+
+    callback(null, body);
+  });
+}
+
+
+
+
+
+
+
+module.exports = { fetchMyIP, fetchCoordsByIP };
